@@ -8,8 +8,8 @@ import {
   CardBody,
   LinkProps,
   SlotsToClasses,
-} from "@nextui-org/react";
-import { LinkIcon } from "@nextui-org/shared-icons";
+} from "@heroui/react";
+import { LinkIcon } from "@heroui/shared-icons";
 
 const styles = tv({
   slots: {
