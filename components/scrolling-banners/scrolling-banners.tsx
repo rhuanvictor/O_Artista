@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import {
   JavascriptIcon,
   N8nIcon,
@@ -15,11 +15,6 @@ import {
 } from "@/components/icons/social"
 
 export default function ScrollingBanner() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
-  const [scrollWidth, setScrollWidth] = useState(0)
-
-  // Ícones
   const icons = [
     { Icon: NextJsIcon, id: "nextjs" },
     { Icon: TypescriptIcon, id: "typescript" },
@@ -33,28 +28,10 @@ export default function ScrollingBanner() {
     { Icon: N8nIcon, id: "n8n" },
   ]
 
-  // Calcula a largura do conteúdo apenas no início e quando a tela for redimensionada
-  useEffect(() => {
-    const calculateWidth = () => {
-      if (innerRef.current) {
-        const singleSetWidth = innerRef.current.firstElementChild?.clientWidth || 0
-        setScrollWidth(singleSetWidth)
-      }
-    }
-
-    calculateWidth()
-    window.addEventListener("resize", calculateWidth)
-
-    return () => {
-      window.removeEventListener("resize", calculateWidth)
-    }
-  }, []) // Apenas executa no início e quando a tela for redimensionada
-
-  // Renderiza os ícones
   const renderIcons = (key: string) => (
     <div className="flex items-center" key={key}>
       {icons.map(({ Icon, id }) => (
-        <span key={`${key}-${id}`} className="inline-flex items-center justify-center text-4xl mx-8">
+        <span key={`${key}-${id}`} className="inline-flex items-center justify-center text-2xl sm:text-3xl md:text-4xl mx-4 sm:mx-6 md:mx-8">
           <Icon />
         </span>
       ))}
@@ -62,38 +39,40 @@ export default function ScrollingBanner() {
   )
 
   return (
-    <div className="relative flex justify-center items-center my-10">
-      {/* Container principal com efeito fade nas laterais */}
+    <div className="relative w-full px-4 sm:px-6 md:px-8 my-6 sm:my-8 md:my-10 overflow-hidden">
+      {/* Container com efeito fade */}
       <div
-        ref={containerRef}
-        className="relative w-[100%] max-w-5xl overflow-hidden"
+        className="relative w-full mx-auto overflow-hidden"
         style={{
-          background: "transparent",
-          maskImage: "linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%)",
-          WebkitMaskImage: "linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%)",
+          maxWidth: '90vw',
+          maskImage: "linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%)",
+          WebkitMaskImage: "linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%)",
         }}
         aria-hidden="true"
       >
-        <div
-          ref={innerRef}
-          className="flex whitespace-nowrap"
-          style={{
-            animation: `scroll ${scrollWidth / 60}s linear infinite`,
-          }}
-        >
+        {/* Animação usando Tailwind */}
+        <div className="flex whitespace-nowrap animate-infinite-scroll">
           {renderIcons("set1")}
           {renderIcons("set2")}
           {renderIcons("set3")}
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes scroll {
+      <style jsx global>{`
+        @keyframes infinite-scroll {
           0% {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-${scrollWidth}px);
+            transform: translateX(-50%);
+          }
+        }
+        .animate-infinite-scroll {
+          animation: infinite-scroll 20s linear infinite;
+        }
+        @media (max-width: 640px) {
+          .animate-infinite-scroll {
+            animation-duration: 15s;
           }
         }
       `}</style>
