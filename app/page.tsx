@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import Badge from "@/components/chip/chip";
 import ScrollingBanner from "@/components/scrolling-banners/scrolling-banners";
-import Picture from "@/components/picture";
+
 import FeaturesBento from "@/components/feature-bento";
 import CustomCard from "@/components/custom-card"; 
 
